@@ -7,9 +7,10 @@ import AudioRecorder from "./AudioRecorder.jsx"
 function App() {
   const [socket, setSocket] = useState(null)
   const [alert, setAlert] = useState(false)
-  const [img, setImg] = useState("https://i.redd.it/dsb199buhxe51.jpg")
   const [time, setTime] = useState(new Date())
   const [audio, setAudio] = useState(null)
+  const [img, setImg] = useState("")
+
 
   useEffect(() => {
     const newSocket = io("https://se101-backend-production.up.railway.app/") //https://se101-backend-production.up.railway.app/
@@ -44,12 +45,20 @@ function App() {
   return (
     <section className="py-4">
       <div className="max-w-screen-xl mx-auto px-2 text-gray-600 gap-x-12 items-center justify-between flex flex-col">
+        {img != ""? 
         <img
-          style={{ height: "300px", width: "500px", objectFit: "cover" }}
-          src={img}
-          className=" rounded-lg"
-          alt=""
-        />
+        style={{height: "300px", width: "500px", objectFit: "cover"}}
+        src={img}
+        className=" rounded-lg"
+        alt=""
+      />
+      :
+      <div
+      className="flex justify-center items-center bg-black text-white rounded-lg"
+      style={{height: "300px", width: "500px", objectFit: "cover"}}>
+        LOADING
+      </div>
+      }
         <div className="mt-6">
           <div className="max-w-2xl">
             <h3 className="text-gray-800 text-3xl font-semibold sm:text-4xl">
