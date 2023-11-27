@@ -2,12 +2,14 @@ import { useState, useEffect } from "react"
 import { io } from "socket.io-client"
 
 import "./App.css"
+import AudioRecorder from "./AudioRecorder.jsx"
 
 function App() {
   const [socket, setSocket] = useState(null)
   const [alert, setAlert] = useState(false)
   const [img, setImg] = useState("https://i.redd.it/dsb199buhxe51.jpg")
   const [time, setTime] = useState(new Date())
+  const [audio, setAudio] = useState(null)
 
   useEffect(() => {
     const newSocket = io("https://se101-backend-production.up.railway.app/") //https://se101-backend-production.up.railway.app/
@@ -29,6 +31,12 @@ function App() {
       setImg("data:image/jpeg;base64," + req.img)
       setTime(new Date(req.time))
       console.log(req.time)
+    })
+
+    newSocket.on("sound", (req) => {
+      console.log("received back")
+      console.log(req)
+      setAudio(req)
     })
   }, [])
 
@@ -65,6 +73,8 @@ function App() {
               </small>
             </p>
             <div className="flex flex-col items-center justify-center mt-5">
+              <AudioRecorder socket={socket} />
+              <audio src={audio?.audio} controls></audio>
               <button
                 onClick={() => {
                   socket.emit("move", {
@@ -74,7 +84,7 @@ function App() {
                   })
                 }}
                 type="button"
-                className="flex justify-center items-center bg-[#428df5] text-white text-[40px] w-[60px] h-[60px] rounded-xl"
+                className="flex justify-center items-center bg-[#428df5] text-white text-[40px] w-[45px] h-[45px] rounded-xl"
               >
                 &uarr;
               </button>
@@ -88,7 +98,7 @@ function App() {
                     })
                   }}
                   type="button"
-                  className="flex justify-center items-center bg-[#428df5] text-white text-[40px] w-[60px] h-[60px] rounded-xl"
+                  className="flex justify-center items-center bg-[#428df5] text-white text-[40px] w-[45px] h-[45px] rounded-xl"
                 >
                   &larr;
                 </button>
@@ -101,7 +111,7 @@ function App() {
                     })
                   }}
                   type="button"
-                  className="flex justify-center items-center bg-[#428df5] text-white text-[40px] w-[60px] h-[60px] rounded-xl"
+                  className="flex justify-center items-center bg-[#428df5] text-white text-[40px] w-[45px] h-[45px] rounded-xl"
                 >
                   &rarr;
                 </button>
@@ -115,7 +125,7 @@ function App() {
                   })
                 }}
                 type="button"
-                className="flex justify-center items-center bg-[#428df5] text-white text-[40px] w-[60px] h-[60px] rounded-xl"
+                className="flex justify-center items-center bg-[#428df5] text-white text-[40px] w-[45px] h-[45px] rounded-xl"
               >
                 &darr;
               </button>
