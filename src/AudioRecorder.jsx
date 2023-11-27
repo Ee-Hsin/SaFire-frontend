@@ -10,6 +10,7 @@ const AudioRecorder = ({ socket }) => {
   const [stream, setStream] = useState(null)
   const [audioChunks, setAudioChunks] = useState([])
   const [audio, setAudio] = useState(null)
+  const [audioBlob, setAudioBlob] = useState()
   const [hasRun, setHasRun] = useState(false)
 
   const getMicrophonePermission = async () => {
@@ -55,6 +56,7 @@ const AudioRecorder = ({ socket }) => {
       //creates a blob file from the audiochunks data
       const audioBlob = new Blob(audioChunks, { type: mimeType })
       //creates a playable URL from the blob file.
+      setAudioBlob(audioBlob)
       const audioUrl = URL.createObjectURL(audioBlob)
       setAudio(audioUrl)
       setAudioChunks([])
@@ -179,10 +181,10 @@ const AudioRecorder = ({ socket }) => {
             className="mt-2 flex items-center gap-2 px-3 py-1.5 text-sm text-white duration-150 bg-blue-600 rounded-lg hover:bg-blue-500 active:bg-blue-700"
             onClick={() => {
               console.log("Sending Audio...")
-              console.log("Sending...", audio)
+              console.log("Sending...", audioBlob)
               // eslint-disable-next-line react/prop-types
               socket.emit("sound", {
-                audio: audio,
+                audio: audioBlob,
               })
             }}
           >
