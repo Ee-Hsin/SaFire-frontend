@@ -14,19 +14,23 @@ function App() {
     const newSocket = io("https://se101-backend-production.up.railway.app/"); //https://se101-backend-production.up.railway.app/
     setSocket(newSocket);
 
+    newSocket.on("connect", ()  => {
+      newSocket.emit("join", {type: "client"})
+    });
+
     newSocket.on('error', (req) =>
     {
       console.log(req);
     })
 
     newSocket.on("alert", (req) => {
-      console.log(req)
       setAlert(true);
-    })
+    })  
 
     newSocket.on("image", (req) => {
       setImg("data:image/jpeg;base64," + req.img);
       setTime(new Date(req.time));
+      console.log(req.time);
     })
   }, [])
   return (
@@ -50,40 +54,41 @@ function App() {
               Image taken at{" "}
               <small className="text-green-300 text-base">{(time.getHours() > 12 ? -12 : 0 )+ time.getHours()}:{((time.getMinutes() < 10) ? "0" : "") + time.getMinutes()} {time.getHours() > 12? "PM" : "AM"}</small>
             </p>
+            <div className="flex flex-col items-center justify-center mt-5">
             <button
               onClick={() => {
                 socket.emit("move", {
                 direction: "up",
-                distance: 1,
+                distance: 10,
                 "id": 1 //id of request
                 });
               }}
     
               type="button"
-              className="mt-6 outline-none text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm p-2.5 text-center inline-flex items-center me-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+              className="flex justify-center items-center bg-[#428df5] text-white text-[40px] w-[60px] h-[60px] rounded-xl"
             >
               &uarr;
             </button>
-            <div className="mt-2">
+            <div className="flex flex-row gap-x-[60px]">
               <button
               onClick={() => {socket.emit("move", {
                 direction: "left",
-                distance: 1,
+                distance: 10,
                 "id": 1 //id of request
               })}}
                 type="button"
-                className="mr-10 outline-none text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm p-2.5 text-center inline-flex items-center me-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                className="flex justify-center items-center bg-[#428df5] text-white text-[40px] w-[60px] h-[60px] rounded-xl"
               >
                 &larr;
               </button>
               <button
               onClick={() => {socket.emit("move", {
                 direction: "right",
-                distance: 1,
+                distance: 10,
                 "id": 1 //id of request
               })}}
                 type="button"
-                className="text-white outline-none bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm p-2.5 text-center inline-flex items-center me-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                className="flex justify-center items-center bg-[#428df5] text-white text-[40px] w-[60px] h-[60px] rounded-xl"
               >
                 &rarr;
               </button>
@@ -91,14 +96,15 @@ function App() {
             <button
               onClick={() => {socket.emit("move", {
                 direction: "down",
-                distance: 1,
+                distance: 10,
                 "id": 1 //id of request
               })}}
               type="button"
-              className="mt-2 text-white outline-none bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm p-2.5 text-center inline-flex items-center me-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+              className="flex justify-center items-center bg-[#428df5] text-white text-[40px] w-[60px] h-[60px] rounded-xl"
             >
               &darr;
             </button>
+            </div>
           </div>
         </div>
       </div>
@@ -107,3 +113,5 @@ function App() {
 }
 
 export default App
+
+
