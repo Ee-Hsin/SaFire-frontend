@@ -1,6 +1,6 @@
 import { useState, useRef } from "react"
 
-const mimeType = "audio/webm"
+const mimeType = "audio/mp3"
 
 // eslint-disable-next-line react/prop-types
 const AudioRecorder = ({ socket }) => {
