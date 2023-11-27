@@ -32,12 +32,6 @@ function App() {
       setTime(new Date(req.time))
       console.log(req.time)
     })
-
-    newSocket.on("sound", (req) => {
-      console.log("received back")
-      console.log(req)
-      setAudio(req)
-    })
   }, [])
 
   //Should reset the thingy to not fire when there is no fire, should work in theory, but in practice idk
@@ -74,7 +68,6 @@ function App() {
             </p>
             <div className="flex flex-col items-center justify-center mt-5">
               <AudioRecorder socket={socket} />
-              <audio src={audio?.audio} controls></audio>
               <button
                 onClick={() => {
                   socket.emit("move", {

@@ -10,6 +10,7 @@ const AudioRecorder = ({ socket }) => {
   const [stream, setStream] = useState(null)
   const [audioChunks, setAudioChunks] = useState([])
   const [audio, setAudio] = useState(null)
+  const [hasRun, setHasRun] = useState(false)
 
   const getMicrophonePermission = async () => {
     if ("MediaRecorder" in window) {
@@ -30,6 +31,7 @@ const AudioRecorder = ({ socket }) => {
 
   const startRecording = async () => {
     setRecordingStatus("recording")
+    setHasRun(true)
     //create new Media recorder instance using the stream
     const media = new MediaRecorder(stream, { type: mimeType })
     //set the MediaRecorder instance to the mediaRecorder ref
@@ -88,7 +90,7 @@ const AudioRecorder = ({ socket }) => {
         ) : null}
         {permission && recordingStatus === "inactive" ? (
           <button
-            className="flex items-center gap-2 px-3 py-1.5 text-sm text-white duration-150 bg-green-600 rounded-lg hover:bg-green-500 active:bg-green-700"
+            className="mb-2 flex items-center gap-2 px-3 py-1.5 text-sm text-white duration-150 bg-green-600 rounded-lg hover:bg-green-500 active:bg-green-700"
             onClick={startRecording}
             type="button"
           >
@@ -123,12 +125,12 @@ const AudioRecorder = ({ socket }) => {
                 </g>
               </g>
             </svg>
-            Start Recording
+            Start {hasRun ? "New" : ""} Recording
           </button>
         ) : null}
         {recordingStatus === "recording" ? (
           <button
-            className="flex items-center gap-2 px-3 py-1.5 text-sm text-white duration-150 bg-red-600 rounded-lg hover:bg-red-500 active:bg-red-700"
+            className="mb-2 flex items-center gap-2 px-3 py-1.5 text-sm text-white duration-150 bg-red-600 rounded-lg hover:bg-red-500 active:bg-red-700"
             onClick={stopRecording}
             type="button"
           >
@@ -169,12 +171,12 @@ const AudioRecorder = ({ socket }) => {
       </div>
       {audio ? (
         <div>
-          <audio src={audio} controls></audio>
+          <audio className="my-2" src={audio} controls></audio>
           {/* <a download href={audio}>
               Download Recording
             </a> */}
           <button
-            className="flex items-center gap-2 px-3 py-1.5 text-sm text-white duration-150 bg-blue-600 rounded-lg hover:bg-blue-500 active:bg-blue-700"
+            className="mt-2 flex items-center gap-2 px-3 py-1.5 text-sm text-white duration-150 bg-blue-600 rounded-lg hover:bg-blue-500 active:bg-blue-700"
             onClick={() => {
               console.log("Sending Audio...")
               console.log("Sending...", audio)
