@@ -11,7 +11,6 @@ function App() {
   const [audio, setAudio] = useState(null)
   const [img, setImg] = useState("")
 
-
   useEffect(() => {
     const newSocket = io("https://se101-backend-production.up.railway.app/") //https://se101-backend-production.up.railway.app/
     setSocket(newSocket)
@@ -43,31 +42,34 @@ function App() {
   }, [img])
 
   return (
-    <section className="py-4">
+    <section className="py-4 bg-black min-h-screen min-w-[100vw]">
       <div className="max-w-screen-xl mx-auto px-2 text-gray-600 gap-x-12 items-center justify-between flex flex-col">
-        {img != ""? 
-        <img
-        style={{height: "300px", width: "500px", objectFit: "cover"}}
-        src={img}
-        className=" rounded-lg"
-        alt=""
-      />
-      :
-      <div
-      className="flex justify-center items-center bg-black text-white rounded-lg"
-      style={{height: "300px", width: "500px", objectFit: "cover"}}>
-        LOADING
-      </div>
-      }
+        {img != "" ? (
+          <img
+            style={{ height: "300px", width: "500px", objectFit: "cover" }}
+            src={img}
+            className=" rounded-lg"
+            alt=""
+          />
+        ) : (
+          <div
+            className="flex justify-center items-center bg-black text-white rounded-lg"
+            style={{ height: "300px", width: "500px", objectFit: "cover" }}
+          >
+            LOADING
+          </div>
+        )}
         <div className="mt-6">
           <div className="max-w-2xl">
-            <h3 className="text-gray-800 text-3xl font-semibold sm:text-4xl">
+            <h3 className="text-white text-3xl font-semibold sm:text-4xl">
               Status:
             </h3>
-            <p className="mt-3 font-bold text-white bg-slate-500 p-4 rounded-lg">
-              {alert ? "FIRE FIRE FIRE 🔥🔥🔥" : "👍 No Fire Detected 👍"}
+            <p className="mt-3 font-bold text-white bg-slate-500 p-4 rounded-lg text-center">
+              {alert
+                ? "🔥🔥🔥 FIRE FIRE FIRE 🔥🔥🔥"
+                : "👍 No Fire Detected 👍"}
             </p>
-            <p className="mt-3 font-bold text-white bg-slate-500 p-4 rounded-lg">
+            <p className="mt-3 font-bold text-white bg-slate-500 p-4 rounded-lg text-center">
               Image taken at{" "}
               <small className="text-green-300 text-base">
                 {(time.getHours() > 12 ? -12 : 0) + time.getHours()}:
