@@ -67,7 +67,7 @@ function App() {
             <p className="mt-3 font-bold text-white bg-slate-500 p-4 rounded-lg text-center">
               {alert
                 ? "🔥🔥🔥 FIRE FIRE FIRE 🔥🔥🔥"
-                : "🔥🔥🔥 FIRE FIRE FIRE 🔥🔥🔥"}
+                : "👍 No Fire Detected 👍"}
             </p>
             <p className="mt-3 font-bold text-white bg-slate-500 p-4 rounded-lg text-center">
               Image taken at{" "}
