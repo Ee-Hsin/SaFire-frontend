@@ -12,7 +12,7 @@ function App() {
   const [img, setImg] = useState("")
 
   useEffect(() => {
-    const newSocket = io(/*"https://se101-backend-production.up.railway.app/"*/"http://localhost:3000") //https://se101-backend-production.up.railway.app/
+    const newSocket = io("https://se101-backend-production.up.railway.app/"/*"http://localhost:3000"*/) //https://se101-backend-production.up.railway.app/
     setSocket(newSocket)
 
     newSocket.on("connect", () => {
