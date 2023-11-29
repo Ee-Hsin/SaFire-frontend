@@ -42,7 +42,7 @@ function App() {
   }, [img])
 
   return (
-    <section className="py-4 bg-black min-h-screen min-w-[100vw]">
+    <section className="py-4 bg-slate-950 min-h-screen min-w-[100vw]">
       <div className="max-w-screen-xl mx-auto px-2 text-gray-600 gap-x-12 items-center justify-between flex flex-col">
         {img != "" ? (
           <img
