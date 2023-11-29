@@ -11,7 +11,20 @@ const AudioRecorder = ({ socket }) => {
   const [audioChunks, setAudioChunks] = useState([])
   const [audio, setAudio] = useState(null)
   const [audioBlob, setAudioBlob] = useState()
+  const [audio64, setAudio64] = useState()
   const [hasRun, setHasRun] = useState(false)
+
+  function blobToBase64(blob) {
+    const reader = new FileReader();
+    reader.readAsDataURL(blob);
+    return new Promise(resolve => {
+        reader.onloadend = () => {
+            resolve(reader.result);
+            console.log(reader.result)
+            setAudio64(reader.result)
+        };
+    });
+  };
 
   const getMicrophonePermission = async () => {
     if ("MediaRecorder" in window) {
@@ -54,7 +67,8 @@ const AudioRecorder = ({ socket }) => {
     mediaRecorder.current.stop()
     mediaRecorder.current.onstop = () => {
       //creates a blob file from the audiochunks data
-      const audioBlob = new Blob(audioChunks, { type: mimeType })
+      const audioBlob = new Blob(audioChunks, { 'type' : 'audio/wav; codecs=MS_PCM' })
+      
       //creates a playable URL from the blob file.
       setAudioBlob(audioBlob)
       const audioUrl = URL.createObjectURL(audioBlob)

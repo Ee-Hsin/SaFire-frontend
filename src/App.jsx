@@ -13,7 +13,7 @@ function App() {
 
 
   useEffect(() => {
-    const newSocket = io("https://se101-backend-production.up.railway.app/") //https://se101-backend-production.up.railway.app/
+    const newSocket = io(/*"https://se101-backend-production.up.railway.app/"*/"http://localhost:3000") //https://se101-backend-production.up.railway.app/
     setSocket(newSocket)
 
     newSocket.on("connect", () => {
@@ -33,14 +33,18 @@ function App() {
       setTime(new Date(req.time))
       console.log(req.time)
     })
+
+    newSocket.on("sound", (req) =>
+    {
+      console.log(req["audio"])
+    })
+
   }, [])
 
   //Should reset the thingy to not fire when there is no fire, should work in theory, but in practice idk
   //one possible flaw is that assuming it is a constant feed of fires, the alert will constantly will set back
   //to false for brief periods.
-  useEffect(() => {
-    setAlert(false)
-  }, [img])
+
 
   return (
     <section className="py-4">
