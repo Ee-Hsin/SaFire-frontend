@@ -1,30 +1,30 @@
-import { useState, useRef } from "react"
+import { useState, useRef } from "react";
 
-const mimeType = "audio/mp3"
+const mimeType = "audio/webm"; //wav support is limited unlike webm support
 
 // eslint-disable-next-line react/prop-types
 const AudioRecorder = ({ socket }) => {
-  const [permission, setPermission] = useState(false)
-  const mediaRecorder = useRef(null)
-  const [recordingStatus, setRecordingStatus] = useState("inactive")
-  const [stream, setStream] = useState(null)
-  const [audioChunks, setAudioChunks] = useState([])
-  const [audio, setAudio] = useState(null)
-  const [audioBlob, setAudioBlob] = useState()
-  const [audio64, setAudio64] = useState()
-  const [hasRun, setHasRun] = useState(false)
+  const [permission, setPermission] = useState(false);
+  const mediaRecorder = useRef(null);
+  const [recordingStatus, setRecordingStatus] = useState("inactive");
+  const [stream, setStream] = useState(null);
+  const [audioChunks, setAudioChunks] = useState([]);
+  const [audio, setAudio] = useState(null);
+  const [audioBlob, setAudioBlob] = useState();
+  const [audio64, setAudio64] = useState();
+  const [hasRun, setHasRun] = useState(false);
 
   function blobToBase64(blob) {
     const reader = new FileReader();
     reader.readAsDataURL(blob);
-    return new Promise(resolve => {
-        reader.onloadend = () => {
-            resolve(reader.result);
-            console.log(reader.result)
-            setAudio64(reader.result)
-        };
+    return new Promise((resolve) => {
+      reader.onloadend = () => {
+        resolve(reader.result);
+        console.log(reader.result);
+        setAudio64(reader.result);
+      };
     });
-  };
+  }
 
   const getMicrophonePermission = async () => {
     if ("MediaRecorder" in window) {
@@ -32,50 +32,50 @@ const AudioRecorder = ({ socket }) => {
         const streamData = await navigator.mediaDevices.getUserMedia({
           audio: true,
           video: false,
-        })
-        setPermission(true)
-        setStream(streamData)
+        });
+        setPermission(true);
+        setStream(streamData);
       } catch (err) {
-        alert(err.message)
+        alert(err.message);
       }
     } else {
-      alert("The MediaRecorder API is not supported in your browser.")
+      alert("The MediaRecorder API is not supported in your browser.");
     }
-  }
+  };
 
   const startRecording = async () => {
-    setRecordingStatus("recording")
-    setHasRun(true)
+    setRecordingStatus("recording");
+    setHasRun(true);
     //create new Media recorder instance using the stream
-    const media = new MediaRecorder(stream, { type: mimeType })
+    const media = new MediaRecorder(stream, { type: mimeType });
     //set the MediaRecorder instance to the mediaRecorder ref
-    mediaRecorder.current = media
+    mediaRecorder.current = media;
     //invokes the start method to start the recording process
-    mediaRecorder.current.start()
-    let localAudioChunks = []
+    mediaRecorder.current.start();
+    let localAudioChunks = [];
     mediaRecorder.current.ondataavailable = (event) => {
-      if (typeof event.data === "undefined") return
-      if (event.data.size === 0) return
-      localAudioChunks.push(event.data)
-    }
-    setAudioChunks(localAudioChunks)
-  }
+      if (typeof event.data === "undefined") return;
+      if (event.data.size === 0) return;
+      localAudioChunks.push(event.data);
+    };
+    setAudioChunks(localAudioChunks);
+  };
 
   const stopRecording = () => {
-    setRecordingStatus("inactive")
+    setRecordingStatus("inactive");
     //stops the recording instance
-    mediaRecorder.current.stop()
+    mediaRecorder.current.stop();
     mediaRecorder.current.onstop = () => {
       //creates a blob file from the audiochunks data
-      const audioBlob = new Blob(audioChunks, { 'type' : 'audio/wav; codecs=MS_PCM' })
-      
+      const audioBlob = new Blob(audioChunks, { type: "audio/webm" });
+
       //creates a playable URL from the blob file.
-      setAudioBlob(audioBlob)
-      const audioUrl = URL.createObjectURL(audioBlob)
-      setAudio(audioUrl)
-      setAudioChunks([])
-    }
-  }
+      setAudioBlob(audioBlob);
+      const audioUrl = URL.createObjectURL(audioBlob);
+      setAudio(audioUrl);
+      setAudioChunks([]);
+    };
+  };
 
   return (
     <div className="mb-4">
@@ -194,12 +194,13 @@ const AudioRecorder = ({ socket }) => {
           <button
             className="mt-2 flex items-center gap-2 px-3 py-1.5 text-sm text-white duration-150 bg-blue-600 rounded-lg hover:bg-blue-500 active:bg-blue-700"
             onClick={() => {
-              console.log("Sending Audio...")
-              console.log("Sending...", audioBlob)
+              console.log("Sending Audio...");
+              console.log("Sending...", audioBlob);
               // eslint-disable-next-line react/prop-types
               socket.emit("sound", {
                 audio: audioBlob,
-              })
+              });
+              console.log(mediaRecorder);
             }}
           >
             Send Recording
@@ -219,6 +220,6 @@ const AudioRecorder = ({ socket }) => {
         </div>
       ) : null}
     </div>
-  )
-}
-export default AudioRecorder
+  );
+};
+export default AudioRecorder;
